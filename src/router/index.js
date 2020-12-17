@@ -32,12 +32,28 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    component: () => import('@/components/auth/Register.vue')
+    component: () => import('@/components/auth/Register.vue'),
+    beforeEnter:(to, from, next) => {
+      if(store.getters['auth/authenticated']){
+        return next({
+            name:'product'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/product/',
     name: 'product',
-    component: () => import('@/components/product/Index.vue')
+    component: () => import('@/components/product/Index.vue'),
+    beforeEnter:(to, from, next) => {
+      if(!store.getters['auth/authenticated']){
+        return next({
+            name:'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/create',
@@ -55,12 +71,15 @@ const routes = [
   {
     path: '/edit/:id',
     name: 'edit',
-    component: () => import('@/components/product/Edit.vue')
-  },
-  {
-    path: '/show/:id',
-    name: 'show',
-    component: () => import('@/components/product/Show.vue')
+    component: () => import('@/components/product/Edit.vue'),
+    beforeEnter:(to, from, next) => {
+      if(!store.getters['auth/authenticated']){
+        return next({
+            name:'login'
+        })
+      }
+      next()
+    }
   }
 ]
 

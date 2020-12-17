@@ -58,7 +58,7 @@ export default {
      submit(){
        this.logIn(this.form).then(() => {
          this.$router.replace({
-           name:'create'
+           name:'product'
          })
        }).catch((e)=>{
          this.error = e.response

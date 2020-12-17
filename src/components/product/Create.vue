@@ -29,30 +29,40 @@
                             <div class="card-header">
                                 <h3 class="card-title">Prodcut Create Form</h3>
                             </div>
-                            
+
                             <form role="form" @submit.prevent="submitProduct" >
                                 <div class="card-body">
                                     <div v-if="error">
-                                        <p v-for="err in error" :key="err" class="text-danger">{{err}}</p>
+                                        <p v-for="(err, index) in error" :key="index" class="text-danger">{{err.errors}}</p>                                       
                                     </div>
                                     <div class="form-group">
                                         <label for="title">Product Title</label>
                                         <input type="text" class="form-control" id="title" placeholder="Enter Product title" v-model="product.title">
+                                        <!-- @{{error.title}} -->
                                     </div>
                                     <div class="form-group">
                                         <label for="price">Product Price</label>
-                                        <input type="number" class="form-control" id="price" placeholder="Enter product price" v-model="product.price">
+                                        <input type="number" class="form-control" id="price" placeholder="Enter product price"  v-model="product.price">
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Product Description</label>
                                         <textarea class="form-control" errorid="description"  v-model="product.description"></textarea>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="image">Product Image</label>
-                                        <input type="file" @change="OnFileChange" name="files"  class="form-control" id="image" placeholder="Enter product price" >
-                                         <img :src ="previewImage" class="uploading-image img-thumbnail" style="width:150px;height:100px"/>
+                                    <div class="row">
+                                         <div class="col-md-6">
+                                             <div class="form-group">
+                                                <img :src ="previewImage" class="uploading-image img-thumbnail" style="width:150px;height:150px"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                             <div class="form-group">
+                                                <label for="image">Product Image</label>
+                                                <input type="file" @change="OnFileChange" name="files"  class="form-control" id="image" placeholder="Enter product price" >
+                                            </div>
+                                        </div>
                                     </div>
+                                   
 
                                 </div>
                                 <div class="card-footer">
@@ -90,10 +100,9 @@ export default {
                     title:'',
                     description:'',
                     price:'',
-                    image:{}
+                    image:null
                 },
-            percent:0,
-            previewImage:null,
+            previewImage:'https://p7.hiclipart.com/preview/115/523/650/product-design-brand-logo-font-demo-thumbnail.jpg',
             error:null
         }
     },
@@ -103,15 +112,34 @@ export default {
         }),
 
         submitProduct(){
+            if(!this.product.title){
+                this.$swal('Error','product title is required','error');
+                return
+            }
+            if(!this.product.price){
+                this.$swal('Error','product price is required','error');
+                return
+            }
+            if(!this.product.description){
+                this.$swal('Error','product description is required','error');
+                return
+            }
+            if(!this.product.image){
+                this.$swal('Error','product image is required','error');
+                return
+            }
             var data = new FormData();
             data.append('title', this.product.title)
             data.append('price', this.product.price)
             data.append('description', this.product.description)
             data.append('image', this.product.image)
-            this.storeProduct(data).then(() => {
-               this.$router.replace({
-                    name:'product'
-                })
+            this.storeProduct(data).then((res) => {
+                this.product.title = null
+                this.product.description = null
+                this.product.price = null
+                this.product.image = null
+                this.previewImage  = 'https://p7.hiclipart.com/preview/115/523/650/product-design-brand-logo-font-demo-thumbnail.jpg'
+                this.$swal(res.message);
             }).catch((e)=>{
                 this.error = e.response
             })

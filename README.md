@@ -1,5 +1,11 @@
 # vue-jwt-auth-product-curd-front-end
 
+# clone this repository in your machine, set base url in data property
+```
+src/components/product/Index.vue
+src/components/product/Edit.vue
+```
+
 ## Project setup
 ```
 npm install
@@ -9,16 +15,3 @@ npm install
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -34,8 +34,9 @@
                     </div>
                     </div>
                     <div class="col-4 float-right">
-                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
                     </div>
+                    <router-link to="login" >Login</router-link>
                 </form>
                 </div>
             </div>
