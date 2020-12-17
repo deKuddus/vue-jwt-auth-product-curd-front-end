@@ -29,19 +29,34 @@
                             <div class="card-header">
                                 <h3 class="card-title">Prodcut Create Form</h3>
                             </div>
-                            <form role="form">
+                            
+                            <form role="form" @submit.prevent="submitProduct" >
                                 <div class="card-body">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Email address</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                                </div>
+                                    <div v-if="error">
+                                        <p v-for="err in error" :key="err" class="text-danger">{{err}}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Product Title</label>
+                                        <input type="text" class="form-control" id="title" placeholder="Enter Product title" v-model="product.title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Product Price</label>
+                                        <input type="number" class="form-control" id="price" placeholder="Enter product price" v-model="product.price">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Product Description</label>
+                                        <textarea class="form-control" errorid="description"  v-model="product.description"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="image">Product Image</label>
+                                        <input type="file" @change="OnFileChange" name="files"  class="form-control" id="image" placeholder="Enter product price" >
+                                         <img :src ="previewImage" class="uploading-image img-thumbnail" style="width:150px;height:100px"/>
+                                    </div>
+
                                 </div>
                                 <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -58,12 +73,58 @@
 </template>
 
 <script>
+
+import {mapActions} from 'vuex'
 import Sidebar from '@/components/Sidebar'
 import Footer from '@/components/Footer'
+
 export default {
+    name:'create',
     components:{
         Sidebar,
         Footer
+    },
+    data(){
+        return{
+             product:{
+                    title:'',
+                    description:'',
+                    price:'',
+                    image:{}
+                },
+            percent:0,
+            previewImage:null,
+            error:null
+        }
+    },
+    methods:{
+        ...mapActions({
+            storeProduct:'product/storeProduct'
+        }),
+
+        submitProduct(){
+            var data = new FormData();
+            data.append('title', this.product.title)
+            data.append('price', this.product.price)
+            data.append('description', this.product.description)
+            data.append('image', this.product.image)
+            this.storeProduct(data).then(() => {
+               this.$router.replace({
+                    name:'product'
+                })
+            }).catch((e)=>{
+                this.error = e.response
+            })
+        },
+        OnFileChange(event){
+            this.product.image = event.target.files[0];
+            const image1 = event.target.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(image1);
+            reader.onload = e =>{
+                this.previewImage = e.target.result;
+            };
+        },
     }
 }
 </script>

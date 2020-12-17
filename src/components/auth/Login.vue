@@ -4,6 +4,9 @@
         <div class="card">
           <div class="card-body login-card-body">
             <p class="login-box-msg">Sign in to start your session</p>
+            <div class="text-danger" v-if="error">
+                <p v-for="err in error" :key="err">{{err.error}}</p>
+            </div>
             <form  method="post" @submit.prevent='submit'>
               <div class="input-group mb-3">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email" v-model="form.email">
@@ -24,6 +27,8 @@
              <div class="col-4 float-right">
               <button type="submit" class="btn btn-primary btn-block">Sign In</button>
             </div>
+            
+              <router-link to="register" >Register</router-link>
 
             </form>
           </div>
@@ -42,7 +47,8 @@ export default {
       form:{
         email:'',
         password:'' 
-      }
+      },
+      error:null
     }
   },
   methods:{
@@ -55,7 +61,7 @@ export default {
            name:'create'
          })
        }).catch((e)=>{
-         console.log(e)
+         this.error = e.response
        })
     }
   }

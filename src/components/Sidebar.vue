@@ -37,7 +37,6 @@
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Product List
-                                <i class="right fas fa-angle-left"></i>
                             </p>
                         </router-link>
                     </li>
@@ -46,7 +45,6 @@
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Create Product
-                                <i class="right fas fa-angle-left"></i>
                             </p>
                         </router-link>
                     </li>

@@ -46,11 +46,15 @@ export default {
       },
       signOut({commit}){
           return axios.post('auth/logout').then(()=>{
-
               commit('SET_TOKEN',null)
               commit('SET_USER',null)
           })
-      }
+      },
+
+      async register(_,credentials){
+         let response = await axios.post('auth/register',credentials);
+         return response;
+      },
   },
 
 }
